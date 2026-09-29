@@ -20,6 +20,10 @@ const barPress = panelSource.match(/onPressed: function\(b\) \{[\s\S]*?\n {4}\}/
 assert(barPress, 'network bar button has an onPressed handler')
 const barPressCode = barPress[0].replace(/\/\/.*$/gm, '')
 assert(!/refresh\(/.test(barPressCode), 'network bar click opens the panel without a second refresh that would undo the deferred scan')
+assert(
+  /if \(connectedWifiNetwork \|\| \(wifiDevice && wifiDevice\.connected\) \|\| info\.type === "wifi"\)/.test(panelSource),
+  'network bar widget falls back to device connection state and live status info'
+)
 
 // A closed panel has no nearby-network list to fill. Quickshell's scanner
 // re-arms RequestScan on its own timer, and every sweep takes the radio off
